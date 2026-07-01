@@ -16,7 +16,7 @@ Tutorial: Step-by-step [bringup &amp; SLAM tutorial](https://makerspet.com/blog/
 Tutorial: Step-by-step [simulate in Gazebo](https://makerspet.com/blog/simulate-the-proscenic-m6-pro-robot-vacuum-in-gazebo-with-ros-2/)
 
 
-![Reference robot vacuum cleaner top](https://github.com/makerspet/oomwoo/assets/vacuum_model_top.webp)
+![Reference robot vacuum cleaner top](https://github.com/makerspet/oomwoo/blob/main/assets/vacuum_model_top.webp)
 
 <img width="1200" height="1200" alt="oomwoo_ros2_gazebo_living_room_simulation" src="https://github.com/user-attachments/assets/0bdb7ca0-746a-4dd5-bb29-26f71b953d6a" />
 
