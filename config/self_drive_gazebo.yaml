@@ -1,0 +1,17 @@
+self_drive_gazebo_node:
+  ros__parameters:
+
+    velocity:
+      topic_name_pub: "cmd_vel"
+      linear: 0.15
+      angular: 0.5
+
+    laser_scan:
+      topic_name_sub: "scan"
+
+    odometry:
+      topic_name_sub: "odom"
+
+    check:
+      angle: 30
+      distance: 0.6

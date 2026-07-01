@@ -1,0 +1,11 @@
+kaiaai_telemetry_node:
+  ros__parameters:
+
+    laser_scan:
+      mask_radius_meters: 0.0625
+      lidar_model: "LDROBOT-LD14P"
+      timestamp_comp: -0.2
+
+    battery:
+      voltage_full: 9.0
+      voltage_empty: 6.8

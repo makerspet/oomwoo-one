@@ -1,0 +1,22 @@
+# Proscenic M6 Pro -- vacuum_ros2_bridge tuning.
+#
+# Robot-specific bridge parameters, loaded by bringup.launch.py so they don't have
+# to be passed on the command line. A command-line arg (e.g. scan_time_offset:=...)
+# still overrides the value here, which is handy for live calibration.
+#
+# Dynamic params (robot_ip, robot_port, publish_tf, frame ids) are NOT set here --
+# bringup.launch.py computes those.
+/**:
+  ros__parameters:
+    # LiDAR scan timestamp compensation (seconds). The scan is older than the
+    # moment it is published, so a small NEGATIVE value back-dates it to when it
+    # was measured and stops points from lagging the robot during rotation.
+    # Calibrate with scripts/calibrate_lidar_bag.py on a clean in-place-spin bag.
+    # TODO: set once a clean spin bag is recorded (indicative ~ -0.03..-0.06).
+    scan_time_offset: 0.0
+
+    # Fixed-pattern-noise mask, 'min1,max1,min2,max2,...' in degrees. These LiDAR
+    # bins are dropped (constant false returns from the enclosure posts around the
+    # puck). Found from the spin bag: posts at ~152 deg (0.32 m) and ~264 deg
+    # (0.34 m). Re-check for a possible 3rd post (~30-40 deg) on a clean scan.
+    scan_mask_deg: "150,156,262,268"

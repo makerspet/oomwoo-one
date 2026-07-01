@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- ****************** ROBOT DIMENSIONS ****************** -->
+  <!-- Units: meters, degrees, kg, N*m, m/s2 -->
+  <!-- oomwoo-one (forked from Proscenic M6 Pro): round body 349mm dia, ~95mm tall (incl. LiDAR turret).
+       Geometry inherited — refine from the sourced parts + 3D design. -->
+  <!-- wheel_base = measured wheel track 235mm. The bridge uses its own odometry
+       constant WHEEL_BASE = 0.233m (2mm less); negligible, calibrate empirically. -->
+  <xacro:property name="wheel_diameter" value="0.068"/>
+  <xacro:property name="wheel_width" value="0.012"/>
+  <xacro:property name="caster_diameter" value="0.025"/>
+  <!-- Caster center to base edge -->
+  <xacro:property name="caster_inset" value="0.030"/>
+  <xacro:property name="floor_clearance" value="0.0125"/>
+  <xacro:property name="base_diameter" value="0.349"/>
+  <xacro:property name="wheel_base" value="0.235"/>
+  <!-- Body cylinder: top is 79mm above the floor, minus 12.5mm floor gap = 66.5mm tall.
+       LiDAR housing sits on top (body top 79mm + 18mm housing = ~97mm total height). -->
+  <xacro:property name="lower_cylinder_height" value="0.0665"/>
+  <!-- LiDAR housing, measured 18mm, seated flush on the body top -->
+  <xacro:property name="laser_puck_height" value="0.018"/>
+  <xacro:property name="laser_puck_diameter" value="0.083"/>
+  <!-- offset = laser_puck_height/2 so the housing bottom sits at the body top -->
+  <xacro:property name="laser_puck_offset" value="0.009"/>
+  <!-- oomwoo-one: the LiDAR turret is CENTERED on top of the round body (offset = 0),
+       unlike the Proscenic M6 Pro this was forked from (whose LiDAR sat ~96.5mm rearward). -->
+  <xacro:property name="lidar_center_offset" value="0.0"/>
+
+  <!-- N*m -->
+  <xacro:property name="motor_stall_torque" value="0.5"/>
+  <xacro:property name="max_linear_acceleration" value="1"/>
+  <xacro:property name="lower_cylinder_mass" value="2.500"/>
+  <!-- caster and battery weight -->
+  <xacro:property name="caster_mass" value="0.050"/>
+  <xacro:property name="wheel_mass" value="0.100"/>
+  <xacro:property name="laser_puck_mass" value="0.150"/>
+  <!-- ****************** **************** ****************** -->
+
+  <!-- Front bumper = the front 180 deg of the body's cylindrical wall, modelled as
+       a continuous faceted arc. Left half spans 0..+90 deg, right half -90..0 deg
+       (they meet at the front, 0 deg, so there is no dead-center gap). Each half is
+       'bumper_facets_per_side' thin box facets, named so the contact sensors can
+       reference them; facets sit at the body radius and protrude a few mm so they
+       are the surface that touches obstacles. -->
+  <xacro:property name="bumper_facets_per_side" value="6"/>
+  <xacro:property name="bumper_thickness" value="0.010"/> <!-- radial; outer face ~5mm proud -->
+  <xacro:property name="bumper_height" value="0.050"/>
+  <xacro:property name="bumper_z" value="0.033"/>     <!-- center height in base_link frame -->
+
+  <xacro:property name="DEG2RAD" value="0.0174533"/>
+</robot>

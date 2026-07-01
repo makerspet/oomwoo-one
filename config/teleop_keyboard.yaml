@@ -1,0 +1,20 @@
+# max_lin_vel = MaxRPM * DerateFactor * WheelDia * PI / 60
+# max_ang_vel = max_lin_vel / (wheel_track / 2)
+# lin_vel_step = min_lin_vel, obtained from test
+# ang_vel_step = min_ang_vel, obtained from test
+# max_lin_accel = WheelDia * RatedTorqueKgCm * 100 / WeightKg
+# max_ang_accel = max_lin_accel / (wheel_track / 2)
+#
+# Proscenic M6 Pro, measured wheel_track = 0.235 m.
+# PROVISIONAL values - confirm against the physical robot:
+#   - max_lin_vel: measure the robot's real top speed
+#   - *_vel_step (min velocities): obtained from test (slowest speed it moves)
+# max_ang_vel below is derived: 0.30 / (0.235 / 2) = 2.55 rad/s.
+teleop_keyboard_node:
+  ros__parameters:
+    max_lin_vel: 0.30
+    max_ang_vel: 2.55
+    lin_vel_step: 0.02
+    ang_vel_step: 0.1
+    lin_vel_step_large: 0.1
+    ang_vel_step_large: 0.5
