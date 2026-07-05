@@ -9,10 +9,10 @@ Tutorials:
 
 ![Reference robot vacuum cleaner top](https://raw.githubusercontent.com/makerspet/oomwoo/main/assets/vacuum_model_top.webp)
 
-[![oomwoo-one simulated in Gazebo with ROS 2](https://makerspet.com/wp-content/uploads/2026/07/oomwoo_one_gazebo_sim.webp)](https://www.youtube.com/watch?v=FOBChivhhkg)
-
-▶ [Watch the Gazebo simulation](https://www.youtube.com/watch?v=FOBChivhhkg) — a screen recording following the [setup &amp; simulation tutorial](https://makerspet.com/blog/simulate-oomwoo-one-robot-vacuum-in-gazebo-with-ros-2/).
-
+### Video: OOMWOO One Step-by-step Gazebo/ROS2 simulation tutorial
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=FOBChivhhkg" target="_blank">
+ <img src="http://img.youtube.com/vi/FOBChivhhkg/maxresdefault.jpg" alt="OOMWOO One Step-by-step Gazebo/ROS2 simulation tutorial" width="720" height="405" border="10" />
+</a>
 
 ## Package contents
 - `urdf/` — xacro description of the ~349 mm round vacuum (body + LiDAR turret, diff-drive
