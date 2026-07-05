@@ -9,7 +9,9 @@ Tutorials:
 
 ![Reference robot vacuum cleaner top](https://raw.githubusercontent.com/makerspet/oomwoo/main/assets/vacuum_model_top.webp)
 
-![oomwoo-one simulated in Gazebo with ROS 2](https://makerspet.com/wp-content/uploads/2026/07/oomwoo_one_gazebo_sim.webp)
+[![oomwoo-one simulated in Gazebo with ROS 2](https://makerspet.com/wp-content/uploads/2026/07/oomwoo_one_gazebo_sim.webp)](https://www.youtube.com/watch?v=FOBChivhhkg)
+
+▶ [Watch the Gazebo simulation](https://www.youtube.com/watch?v=FOBChivhhkg) — a screen recording following the [setup &amp; simulation tutorial](https://makerspet.com/blog/simulate-oomwoo-one-robot-vacuum-in-gazebo-with-ros-2/).
 
 
 ## Package contents
