@@ -1,7 +1,7 @@
 # oomwoo-one — ROS 2 robot description + Gazebo simulation
 
 ROS 2 robot description and Gazebo simulation for **oomwoo-one**, the first
-[oomwoo](https://github.com/makerspet/oomwoo) open-source robot vacuum model.
+[OOMWOO](https://github.com/makerspet/oomwoo) open-source robot vacuum model.
 
 Tutorials:
 - [Simulate oomwoo-one in Gazebo with ROS 2](https://makerspet.com/blog/simulate-oomwoo-one-robot-vacuum-in-gazebo-with-ros-2/)
