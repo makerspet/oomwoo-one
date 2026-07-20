@@ -12,8 +12,8 @@ ROS 2 Jazzy · Gazebo · URDF · Nav2 · SLAM · 2D LiDAR · robot description
 
 </div>
 
-ROS 2 robot description and Gazebo simulation for **oomwoo-one**, the first
-[OOMWOO](https://github.com/makerspet/oomwoo) open-source robot vacuum model.
+ROS 2 robot description, Gazebo simulation for **oomwoo-one**, the first
+[OOMWOO](https://github.com/makerspet/oomwoo) open-source robot vacuum model. TODO download [3D printing STEP/3MF and CAD design](https://github.com/makerspet/oomwoo-one-cad).
 
 Tutorials:
 - [Simulate oomwoo-one in Gazebo with ROS 2](https://makerspet.com/blog/simulate-oomwoo-one-robot-vacuum-in-gazebo-with-ros-2/)
