@@ -16,7 +16,7 @@
 
 # Physical bring-up for the Proscenic M6 Pro robot vacuum.
 #
-# Unlike the ESP32 + micro-ROS robots (kaiaai_bringup/physical.launch.py, which
+# Unlike the ESP32 + micro-ROS robots (oomwoo_bringup/physical.launch.py, which
 # starts a micro_ros_agent + kaiaai_telemetry/telem), the Proscenic runs SangamIO
 # on-board and is bridged to ROS 2 over TCP by remakeai/vacuum_ros2_bridge.
 #

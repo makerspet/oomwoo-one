@@ -31,11 +31,12 @@
 
     <!-- The Contact system is a WORLD-level system in gz-sim; declaring it here
          at model level is a no-op (verified: contacts never fire in a world that
-         lacks the world-level plugin, e.g. kaiaai_gazebo living_room.world, even
-         though the sensor and topic exist). The world MUST load it:
+         lacks the world-level plugin, even though the sensor and topic exist).
+         The world MUST load it:
            <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
-         oomwoo_sim_support/worlds/test_room.world already does. It is kept here as
-         documentation of the dependency; remove it and nothing changes. -->
+         Both worlds OOMWOO ships already do (oomwoo_sim_support test_room.world and
+         oomwoo_gazebo living_room.world). It is kept here as documentation of the
+         dependency; remove it and nothing changes. -->
     <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
   </gazebo>
 

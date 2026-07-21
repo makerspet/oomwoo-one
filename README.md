@@ -48,8 +48,8 @@ kaia config robot.model oomwoo_one
 
 ### Simulation (no robot needed)
 ```
-ros2 launch kaiaai_gazebo world.launch.py
-ros2 launch kaiaai_bringup navigation.launch.py use_sim_time:=true slam:=True
+ros2 launch oomwoo_gazebo world.launch.py
+ros2 launch oomwoo_bringup navigation.launch.py use_sim_time:=true slam:=True
 ros2 run kaiaai_teleop teleop_keyboard
 ```
 
@@ -57,7 +57,7 @@ ros2 run kaiaai_teleop teleop_keyboard
 The robot must be on the LAN running SangamIO (see the [Proscenic root &amp; setup tutorial](https://makerspet.com/blog/tutorial-connect-robot-vacuum-cleaner-to-ros-2-proscenic-m6-pro/) for flashing/Wi-Fi).
 ```
 ros2 launch oomwoo_one bringup.launch.py robot_ip:=<robot-ip>
-ros2 launch kaiaai_bringup navigation.launch.py slam:=True
+ros2 launch oomwoo_bringup navigation.launch.py slam:=True
 ros2 run kaiaai_teleop teleop_keyboard
 ros2 run nav2_map_server map_saver_cli -f ~/maps/map
 ```

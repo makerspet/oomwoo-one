@@ -91,9 +91,9 @@ topic still matches the sensor's actual link.
 
 `gz-sim-contact-system` is a world plugin. Declaring it inside the robot model
 (`<gazebo><plugin ... Contact/></gazebo>`) is a **no-op** — verified: bumpers fire
-in `test_room.world` (which loads it at world level) and stay silent in
-`kaiaai_gazebo`'s `living_room.world` (which does not), even though the sensor and
-its topic both exist.
+only in worlds that load it at world level; in a world that does not, the sensor
+and its topic exist but stay permanently silent. (The original upstream
+`kaiaai_gazebo` `living_room.world` lacked it, which is why this was found.)
 
 Any world used for bumper testing needs, inside `<world>`:
 
@@ -101,8 +101,9 @@ Any world used for bumper testing needs, inside `<world>`:
 <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
 ```
 
-`oomwoo_sim_support/worlds/test_room.world` already has it. **`living_room.world`
-(in `kaiaai_gazebo`) does not** — add it there if you need bumpers in that world.
+Both worlds OOMWOO ships already have it — `oomwoo_sim_support/worlds/test_room.world`
+and `oomwoo_gazebo`'s `living_room.world` — so bumpers work in either. Add it to
+any other world you test in.
 
 ## Verifying bumpers work
 
