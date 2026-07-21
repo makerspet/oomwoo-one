@@ -34,7 +34,9 @@ Tutorials:
   which cartographer requires).
 - `config/cartographer_lds_2d.lua`, `config/navigation.yaml`, … — SLAM / Nav2 tuning.
 - `config/gz_bridge.yaml`, `urdf/plugins.xacro` — Gazebo simulation (diff-drive, odometry,
-  gpu_lidar) — simulation does **not** use the bridge.
+  gpu_lidar, and front bumper contact sensors). See
+  [docs/sim-bumpers.md](docs/sim-bumpers.md) for how the simulated bumpers are wired and
+  the three gz-sim gotchas that make them easy to break.
 - `launch/bringup.launch.py` — physical bring-up: bridge + `robot_state_publisher` + EKF.
 
 ## Usage
