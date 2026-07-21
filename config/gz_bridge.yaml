@@ -42,14 +42,22 @@
 
 # Front bumper contact sensors (gz contact -> ROS). Note: this is the sim-only
 # representation; the physical robot publishes /bumper (vacuum_ros2_bridge/Bumper).
+#
+# gz-sim ignores a contact sensor's <topic> and publishes ONLY to the auto-scoped
+# name below, so gz_topic_name must be the full scoped path. It couples to:
+#   world "default"      - both test_room.world and living_room.world use it
+#   model "oomwoo_one"   - the spawn -name (this bridge is oomwoo_one-specific)
+#   link  "base_footprint" - the canonical root after fixed-joint lumping
+# The world must also load gz-sim-contact-system or these stay silent (see
+# urdf/plugins.xacro). test/test_bumper_wiring.py checks these names still match.
 - ros_topic_name: "bumper_left/contact"
-  gz_topic_name: "bumper_left/contact"
+  gz_topic_name: "/world/default/model/oomwoo_one/link/base_footprint/sensor/bumper_left/contact"
   ros_type_name: "ros_gz_interfaces/msg/Contacts"
   gz_type_name: "gz.msgs.Contacts"
   direction: GZ_TO_ROS
 
 - ros_topic_name: "bumper_right/contact"
-  gz_topic_name: "bumper_right/contact"
+  gz_topic_name: "/world/default/model/oomwoo_one/link/base_footprint/sensor/bumper_right/contact"
   ros_type_name: "ros_gz_interfaces/msg/Contacts"
   gz_type_name: "gz.msgs.Contacts"
   direction: GZ_TO_ROS

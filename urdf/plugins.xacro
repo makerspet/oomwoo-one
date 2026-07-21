@@ -29,29 +29,44 @@
       <joint_name>wheel_right_joint</joint_name>
     </plugin>
 
-    <!-- Processes the bumper contact sensors below. NOTE: the Contact system is
-         normally a WORLD-level system. If the bumper contact topics don't appear,
-         add this same plugin to the Gazebo world (kaiaai_gazebo living_room.world). -->
+    <!-- The Contact system is a WORLD-level system in gz-sim; declaring it here
+         at model level is a no-op (verified: contacts never fire in a world that
+         lacks the world-level plugin, e.g. kaiaai_gazebo living_room.world, even
+         though the sensor and topic exist). The world MUST load it:
+           <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
+         oomwoo_sim_support/worlds/test_room.world already does. It is kept here as
+         documentation of the dependency; remove it and nothing changes. -->
     <plugin filename="gz-sim-contact-system" name="gz::sim::systems::Contact"/>
   </gazebo>
 
-  <!-- Lists all facet collision names for one bumper half, for the contact sensor. -->
-  <xacro:macro name="bumper_facet_collisions" params="prefix n i:=0">
+  <!-- Lists the facet collision names for one bumper half, for the contact sensor.
+       These MUST be the post-lump names: the URDF->SDF parser lumps every fixed-joint
+       child into the canonical root (base_footprint) and renames each collision to
+       <root>_fixed_joint_lump__<name>_collision_<N>, where N is the collision's
+       document-order index within the lump (the first, the base_link body cylinder,
+       is index 0 and gets no suffix; the 12 bumper facets are 1..12). A gz contact
+       sensor referencing the pre-lump name (bumper_left_0) silently never fires.
+       If you add/remove/reorder base_link collisions, N shifts and these break;
+       the test in test/test_bumper_wiring.py catches that. To regenerate the names:
+         xacro robot.urdf.xacro | gz sdf -p /dev/stdin | grep 'collision name' -->
+  <xacro:macro name="bumper_facet_collisions" params="prefix n lump_base i:=0">
     <xacro:if value="${i &lt; n}">
-      <collision>${prefix}_${i}</collision>
-      <xacro:bumper_facet_collisions prefix="${prefix}" n="${n}" i="${i + 1}"/>
+      <collision>base_footprint_fixed_joint_lump__${prefix}_${i}_collision_${lump_base + i}</collision>
+      <xacro:bumper_facet_collisions prefix="${prefix}" n="${n}" lump_base="${lump_base}" i="${i + 1}"/>
     </xacro:if>
   </xacro:macro>
 
   <!-- Front bumper contact sensors. Each half watches all of its arc-facet
-       collisions on base_link (see robot.urdf.xacro) and publishes gz.msgs.Contacts,
-       bridged to ROS as ros_gz_interfaces/msg/Contacts (see config/gz_bridge.yaml). -->
+       collisions on base_link (see robot.urdf.xacro) and publishes gz.msgs.Contacts.
+       NOTE: gz-sim ignores the <topic> below for contact sensors and publishes only
+       to the scoped name /world/<world>/model/<model>/link/base_footprint/sensor/
+       <sensor>/contact, which config/gz_bridge.yaml bridges verbatim. -->
   <gazebo reference="base_link">
     <sensor name="bumper_left" type="contact">
       <always_on>true</always_on>
       <update_rate>50</update_rate>
       <contact>
-        <xacro:bumper_facet_collisions prefix="bumper_left" n="${bumper_facets_per_side}"/>
+        <xacro:bumper_facet_collisions prefix="bumper_left" n="${bumper_facets_per_side}" lump_base="1"/>
       </contact>
       <topic>bumper_left/contact</topic>
     </sensor>
@@ -59,7 +74,7 @@
       <always_on>true</always_on>
       <update_rate>50</update_rate>
       <contact>
-        <xacro:bumper_facet_collisions prefix="bumper_right" n="${bumper_facets_per_side}"/>
+        <xacro:bumper_facet_collisions prefix="bumper_right" n="${bumper_facets_per_side}" lump_base="${1 + bumper_facets_per_side}"/>
       </contact>
       <topic>bumper_right/contact</topic>
     </sensor>
