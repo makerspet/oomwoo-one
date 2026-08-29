@@ -150,7 +150,7 @@
           </horizontal>
         </scan>
         <range>
-          <min>0.1</min>
+          <min>${lidar_min_range}</min>
           <max>10.0</max>
           <resolution>0.02</resolution>
         </range>
