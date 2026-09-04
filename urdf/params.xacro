@@ -9,7 +9,10 @@
   <xacro:property name="wheel_diameter" value="0.068"/>
   <xacro:property name="wheel_width" value="0.012"/>
   <xacro:property name="caster_diameter" value="0.025"/>
-  <!-- Caster center to base edge -->
+  <!-- Caster center to base edge. The caster sits at the FRONT (+x), like a
+       consumer vacuum: the support polygon then spans the wheel axle (x = 0)
+       forward to the caster, so the centre of mass must stay AHEAD of the axle.
+       See lidar_center_offset below, which is what puts it there. -->
   <xacro:property name="caster_inset" value="0.030"/>
   <xacro:property name="floor_clearance" value="0.0125"/>
   <xacro:property name="base_diameter" value="0.349"/>
@@ -24,17 +27,20 @@
   <xacro:property name="laser_puck_offset" value="0.009"/>
   <!-- 2D LiDAR minimum range; kept in sync with the sensor <min> in plugins.xacro. -->
   <xacro:property name="lidar_min_range" value="0.1"/>
-  <!-- LiDAR fore/aft mount on the body top (base_link +x = forward). KEEP AT 0.0.
-       The only support behind the wheel axle is the single rear caster (there is no
-       front caster), so the robot tips onto its front body edge as soon as the centre
-       of mass crosses x = 0, and that margin is tiny. With the turret centred the CoM
-       sits just 1.6 mm behind the axle; moving the 150 g puck forward by
-       base_diameter/2 - lidar_min_range (0.0745 m) shifts it +3.8 mm, to 2.2 mm AHEAD.
-       The robot then rests nose-down at asin(floor_clearance/(base_diameter/2)) = 4.1
-       deg, which tips the scan plane onto the floor about 1.1 m ahead: a phantom
-       "wall" that follows the robot everywhere and wrecks wall-following and scan
-       matching alike. Mounting the LiDAR forward requires a FRONT caster first. -->
-  <xacro:property name="lidar_center_offset" value="0.0"/>
+  <!-- LiDAR fore/aft mount on the body top (base_link +x = forward). Seated so its
+       minimum range lands at the front body edge: base_diameter/2 - lidar_min_range
+       (about 0.0745 m) forward of centre. That puts the sensing floor at the bumper
+       and brings a convex corner into view a little sooner.
+
+       This offset also carries the robot's BALANCE, so do not change it in isolation.
+       The caster is at the front, so the support spans x = 0 (wheel axle) to the
+       caster and the centre of mass must stay AHEAD of the axle. The 150 g puck at
+       +0.0745 m is what puts it there: CoM = +2.2 mm with this offset, -1.6 mm with
+       the turret centred. Get it wrong and the robot rests tilted on a body edge,
+       which drops the scan plane onto the floor about a metre out and paints a
+       phantom "wall" that follows the robot everywhere. Re-check the CoM (mass x
+       position over all links, axle at x = 0) after touching this or the caster. -->
+  <xacro:property name="lidar_center_offset" value="${base_diameter/2 - lidar_min_range}"/>
 
   <!-- N*m -->
   <xacro:property name="motor_stall_torque" value="0.5"/>

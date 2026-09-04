@@ -148,7 +148,7 @@
   <joint name="caster_joint" type="fixed">
     <parent link="base_link"/>
     <child link="caster_link"/>
-    <origin xyz="${caster_inset-base_diameter/2} 0 ${caster_diameter/2-floor_clearance}" rpy="0 0 0"/>
+    <origin xyz="${base_diameter/2-caster_inset} 0 ${caster_diameter/2-floor_clearance}" rpy="0 0 0"/>
   </joint>
 
   <link name="caster_link">
