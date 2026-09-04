@@ -24,16 +24,17 @@
   <xacro:property name="laser_puck_offset" value="0.009"/>
   <!-- 2D LiDAR minimum range; kept in sync with the sensor <min> in plugins.xacro. -->
   <xacro:property name="lidar_min_range" value="0.1"/>
-  <!-- LiDAR fore/aft mount on the body top (base_link +x = forward). Seated so its
-       minimum range lands at the front body edge, i.e. base_diameter/2 minus
-       lidar_min_range forward of centre (about 0.0745 m here), so the sensing floor
-       sits at the bumper and a convex corner comes into view a little sooner (earlier
-       look-ahead when following an obstacle's shape). Set to 0.0 for the centred
-       turret: the A/B baseline, and how oomwoo-one shipped before this. (The Proscenic
-       M6 Pro it was forked from sat about 96.5 mm rearward.) Everything downstream
-       reads the base_scan TF, so this is a transparent move; no re-mapping, and the
-       saved maps stay valid. -->
-  <xacro:property name="lidar_center_offset" value="${base_diameter/2 - lidar_min_range}"/>
+  <!-- LiDAR fore/aft mount on the body top (base_link +x = forward). KEEP AT 0.0.
+       The only support behind the wheel axle is the single rear caster (there is no
+       front caster), so the robot tips onto its front body edge as soon as the centre
+       of mass crosses x = 0, and that margin is tiny. With the turret centred the CoM
+       sits just 1.6 mm behind the axle; moving the 150 g puck forward by
+       base_diameter/2 - lidar_min_range (0.0745 m) shifts it +3.8 mm, to 2.2 mm AHEAD.
+       The robot then rests nose-down at asin(floor_clearance/(base_diameter/2)) = 4.1
+       deg, which tips the scan plane onto the floor about 1.1 m ahead: a phantom
+       "wall" that follows the robot everywhere and wrecks wall-following and scan
+       matching alike. Mounting the LiDAR forward requires a FRONT caster first. -->
+  <xacro:property name="lidar_center_offset" value="0.0"/>
 
   <!-- N*m -->
   <xacro:property name="motor_stall_torque" value="0.5"/>
