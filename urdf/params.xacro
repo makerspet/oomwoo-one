@@ -56,10 +56,26 @@
        a continuous faceted arc. Left half spans 0..+90 deg, right half -90..0 deg
        (they meet at the front, 0 deg, so there is no dead-center gap). Each half is
        'bumper_facets_per_side' thin box facets, named so the contact sensors can
-       reference them; facets sit at the body radius and protrude a few mm so they
-       are the surface that touches obstacles. -->
-  <xacro:property name="bumper_facets_per_side" value="6"/>
-  <xacro:property name="bumper_thickness" value="0.010"/> <!-- radial; outer face ~5mm proud -->
+       reference them.
+
+       FLUSH, not proud: the facets sit just inside the body radius, with each
+       facet's outer corners landing exactly on it, so the robot's outline is a
+       plain circle of base_diameter, like every consumer vacuum. A round outline
+       is what lets a robot turn in place out of the tightest dead end; a bumper
+       standing 5 mm proud (the earlier model) made the robot 7 mm wider in front
+       than behind, and its facet corners reached 0.1814 m instead of 0.1745 m.
+
+       Flush has one trap. If the body's collision cylinder had the same radius as
+       the bumper, the two would tie, and wherever the body touched first the
+       contact sensor (which watches only the facets) would never fire. So the
+       body's COLLISION cylinder is bumper_lead smaller than the facets' flat outer
+       faces, which is how a real robot is built: the chassis sits behind the
+       bumper shell. The body's VISUAL stays full size.
+
+       12 facets per side keep the faceting error at 0.5 mm (6 gave 1.9 mm). -->
+  <xacro:property name="bumper_facets_per_side" value="12"/>
+  <xacro:property name="bumper_thickness" value="0.010"/> <!-- radial -->
+  <xacro:property name="bumper_lead" value="0.002"/> <!-- bumper face ahead of the body collision -->
   <!-- Bumper spans the FULL body cylinder height, centered on it (like a consumer
        vacuum), so a low ledge the body can hit (e.g. a bookcase bottom shelf)
        always contacts the bumper instead of wedging in the gap above or below it.

@@ -7,11 +7,24 @@
 
   <!-- ****************** **************** ****************** -->
 
+  <!-- Bumper geometry, derived. Each facet is a flat plate whose outer corners
+       sit exactly on the body radius (flush), so its flat outer face is at
+       bumper_face_radius, a fraction of a mm inside. The body's collision
+       cylinder sits bumper_lead further in, so the bumper always touches first.
+       See the bumper notes in params.xacro. -->
+  <xacro:property name="bumper_facet_width"
+                  value="${2 * (base_diameter/2) * sin(0.5 * (90.0/bumper_facets_per_side) * DEG2RAD) * 1.15}"/>
+  <xacro:property name="bumper_face_radius"
+                  value="${sqrt((base_diameter/2)**2 - (bumper_facet_width/2)**2)}"/>
+  <xacro:property name="bumper_center_radius" value="${bumper_face_radius - bumper_thickness/2}"/>
+  <xacro:property name="body_collision_radius" value="${bumper_face_radius - bumper_lead}"/>
+
   <!-- One bumper facet: a thin box tangent to the body at angle 'ang' (deg from
-       front), at the body radius. Named collision so the contact sensor can list it. -->
+       front), flush with the body radius. Named collision so the contact sensor
+       can list it. -->
   <xacro:macro name="bumper_facet" params="prefix idx ang width">
     <visual>
-      <origin xyz="${(base_diameter/2)*cos(ang*DEG2RAD)} ${(base_diameter/2)*sin(ang*DEG2RAD)} ${bumper_z}"
+      <origin xyz="${bumper_center_radius*cos(ang*DEG2RAD)} ${bumper_center_radius*sin(ang*DEG2RAD)} ${bumper_z}"
               rpy="0 0 ${(ang+90)*DEG2RAD}"/>
       <geometry>
         <box size="${width} ${bumper_thickness} ${bumper_height}"/>
@@ -19,7 +32,7 @@
       <material name="dark"/>
     </visual>
     <collision name="${prefix}_${idx}">
-      <origin xyz="${(base_diameter/2)*cos(ang*DEG2RAD)} ${(base_diameter/2)*sin(ang*DEG2RAD)} ${bumper_z}"
+      <origin xyz="${bumper_center_radius*cos(ang*DEG2RAD)} ${bumper_center_radius*sin(ang*DEG2RAD)} ${bumper_z}"
               rpy="0 0 ${(ang+90)*DEG2RAD}"/>
       <geometry>
         <box size="${width} ${bumper_thickness} ${bumper_height}"/>
@@ -33,7 +46,7 @@
     <xacro:if value="${i &lt; n}">
       <xacro:bumper_facet prefix="${prefix}" idx="${i}"
         ang="${a0 + (i + 0.5) * (90.0 / n)}"
-        width="${2 * (base_diameter/2) * sin(0.5 * (90.0/n) * DEG2RAD) * 1.15}"/>
+        width="${bumper_facet_width}"/>
       <xacro:bumper_arc prefix="${prefix}" a0="${a0}" n="${n}" i="${i + 1}"/>
     </xacro:if>
   </xacro:macro>
@@ -180,10 +193,12 @@
       <material name="grey"/>
     </visual>
 
+    <!-- Collision is bumper_lead inside the bumper face, so the bumper touches
+         first; the visual above stays at the full body radius. -->
     <collision>
       <origin xyz="0 0 ${lower_cylinder_height/2}" rpy="0 0 0"/>
       <geometry>
-        <cylinder length="${lower_cylinder_height}" radius="${base_diameter/2}"/>
+        <cylinder length="${lower_cylinder_height}" radius="${body_collision_radius}"/>
       </geometry>
     </collision>
 
