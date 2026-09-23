@@ -74,6 +74,25 @@
        aim reads the wall distance directly abeam, the basis for distance-keeping
        wall following. On the physical robot this maps to a ToF (sensor_msgs/Range);
        in sim it is a 1-beam sensor_msgs/LaserScan. All values below are tunable. -->
+  <!-- Rear IR beacon receivers, for docking. Two of them, splayed either side of
+       dead astern with a baffle between, so the dock's beacon is centred when
+       both read the same: the classic balance measurement. They sit at body
+       mid-height to match the beacon's height in the dock, and face BACKWARDS
+       because the robot reverses in to wash its mops.
+
+       ir_rx_splay_deg is the mount angle either side of astern. Wider splay
+       sharpens the balance point (the signals cross more steeply) but shrinks
+       the arc in which both receivers see the beacon at all, which is what the
+       spin-to-find search has to land in. -->
+  <xacro:property name="ir_rx_splay_deg" value="25.0"/>
+  <xacro:property name="ir_rx_fov_deg" value="50.0"/>      <!-- half-angle each -->
+  <xacro:property name="ir_rx_y" value="0.030"/>           <!-- lateral offset -->
+  <xacro:property name="ir_rx_z" value="${lower_cylinder_height/2}"/>
+  <xacro:property name="ir_rx_size" value="0.010"/>
+  <xacro:property name="ir_rx_mass" value="0.004"/>
+  <xacro:property name="ir_baffle_len" value="0.030"/>     <!-- fin, inward from the shell -->
+  <xacro:property name="ir_baffle_thick" value="0.003"/>
+
   <xacro:property name="range_sensor_min" value="0.02"/>          <!-- m: closest reading -->
   <xacro:property name="range_sensor_max" value="0.50"/>          <!-- m: beyond this reads as no wall -->
   <xacro:property name="range_sensor_resolution" value="0.005"/>  <!-- m -->

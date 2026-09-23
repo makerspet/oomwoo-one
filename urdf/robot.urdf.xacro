@@ -62,6 +62,56 @@
     </link>
   </xacro:macro>
 
+  <!-- One rear IR beacon receiver. Its +X axis is the receiver boresight, aimed
+       backwards and splayed outward by ir_rx_splay_deg. side_sign = +1 left
+       (+Y), -1 right (-Y). Nothing in Gazebo simulates an IR receiver, so the
+       signal comes from ir_beacon_sim; these links exist to carry the mount
+       geometry, which is what the bearing is computed against. -->
+  <xacro:macro name="ir_receiver" params="prefix side_sign">
+    <joint name="${prefix}_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="${prefix}_link"/>
+      <origin xyz="${-base_diameter/2 + ir_rx_size} ${side_sign * ir_rx_y} ${ir_rx_z}"
+              rpy="0 0 ${(180.0 - side_sign * ir_rx_splay_deg) * DEG2RAD}"/>
+    </joint>
+    <link name="${prefix}_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${ir_rx_size} ${ir_rx_size} ${ir_rx_size}"/>
+        </geometry>
+        <material name="dark"/>
+      </visual>
+      <xacro:solid_box_inertia m="${ir_rx_mass}"
+        x="${ir_rx_size}" y="${ir_rx_size}" z="${ir_rx_size}"/>
+    </link>
+  </xacro:macro>
+
+  <!-- The baffle between the receivers: a fin on the centreline, filling the
+       gap between them out to the shell. It stops each receiver seeing the
+       beacon far across the centreline (past about 70 deg, with 10 mm of fin
+       behind the receivers), which the balance would otherwise misread. Nearer
+       astern the receivers' own lobes decide: both see the beacon within about
+       +-25 deg, the window the spin-to-find search has to land in. -->
+  <xacro:macro name="ir_baffle">
+    <joint name="ir_baffle_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="ir_baffle_link"/>
+      <origin xyz="${-base_diameter/2 + ir_baffle_len/2} 0 ${ir_rx_z}" rpy="0 0 0"/>
+    </joint>
+    <link name="ir_baffle_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <box size="${ir_baffle_len} ${ir_baffle_thick} ${ir_rx_size * 2}"/>
+        </geometry>
+        <material name="dark"/>
+      </visual>
+      <xacro:solid_box_inertia m="${ir_rx_mass}"
+        x="${ir_baffle_len}" y="${ir_baffle_thick}" z="${ir_rx_size * 2}"/>
+    </link>
+  </xacro:macro>
+
   <!-- Front multizone ToF: a small forward-facing link at body mid-height, front
        center. Its +X is the depth-grid boresight; the 16x8 ray sensor is in
        plugins.xacro. Visual is a wide box hinting at the two ToF modules. -->
@@ -260,6 +310,9 @@
   </link>
 
   <!-- Left/right side distance sensors (short-range wall sensors) -->
+  <xacro:ir_receiver prefix="ir_rx_left" side_sign="1"/>
+  <xacro:ir_receiver prefix="ir_rx_right" side_sign="-1"/>
+  <xacro:ir_baffle/>
   <xacro:side_range_sensor prefix="range_left" side_sign="1"/>
   <xacro:side_range_sensor prefix="range_right" side_sign="-1"/>
 
