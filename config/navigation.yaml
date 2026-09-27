@@ -117,47 +117,38 @@ controller_server:
       plugin: "nav2_controller::SimpleGoalChecker"
       xy_goal_tolerance: 0.15
       yaw_goal_tolerance: 0.15
+    # Regulated Pure Pursuit, not DWB. DWB scores trajectories against every
+    # bit of plan inside its 3 m window, and a plan that U-turns round the end
+    # of a thin wall (a room divider, an open door, the torture course's
+    # peninsula) lies on BOTH sides of it -- so driving forward stops scoring
+    # better than standing still, and DWB sat on open floor facing down its own
+    # path for 10 minutes. RPP chases one point 0.4 m ahead on the path and does
+    # not care what the rest of it does. Measured: the cleaning manager's run
+    # of the torture course stalled at 94% under DWB, finished 97% in 8 min
+    # under this.
     FollowPath:
-      plugin: "dwb_core::DWBLocalPlanner"
-      debug_trajectory_details: true
-      min_vel_x: 0.0
-      min_vel_y: 0.0
-      max_vel_x: 0.2
-      max_vel_y: 0.0
-      max_vel_theta: 0.8
-      min_speed_xy: 0.0
-      max_speed_xy: 0.2
-      min_speed_theta: 0.0
-      # Add high threshold velocity for turtlebot 3 issue.
-      # https://github.com/ROBOTIS-GIT/turtlebot3_simulations/issues/75
-      acc_lim_x: 3.0
-      acc_lim_y: 0.0
-      acc_lim_theta: 3.2
-      decel_lim_x: -2.5
-      decel_lim_y: 0.0
-      decel_lim_theta: -3.2
-      vx_samples: 20
-      vy_samples: 0
-      vtheta_samples: 40
-      sim_time: 1.5
-      linear_granularity: 0.05
-      angular_granularity: 0.025
+      plugin: "nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController"
+      desired_linear_vel: 0.2
+      lookahead_dist: 0.4
+      min_lookahead_dist: 0.25
+      max_lookahead_dist: 0.6
+      lookahead_time: 1.5
+      use_velocity_scaled_lookahead_dist: false
+      rotate_to_heading_angular_vel: 0.8
       transform_tolerance: 0.2
-      xy_goal_tolerance: 0.15
-      trans_stopped_velocity: 0.25
-      short_circuit_trajectory_evaluation: true
-      stateful: true
-      critics: ["RotateToGoal", "Oscillation", "BaseObstacle", "GoalAlign", "PathAlign", "PathDist", "GoalDist"]
-      BaseObstacle.scale: 0.02
-      PathAlign.scale: 32.0
-      PathAlign.forward_point_distance: 0.1
-      GoalAlign.scale: 24.0
-      GoalAlign.forward_point_distance: 0.1
-      PathDist.scale: 32.0
-      GoalDist.scale: 24.0
-      RotateToGoal.scale: 32.0
-      RotateToGoal.slowing_factor: 5.0
-      RotateToGoal.lookahead_time: -1.0
+      min_approach_linear_velocity: 0.05
+      approach_velocity_scaling_dist: 0.4
+      use_collision_detection: true
+      max_allowed_time_to_collision_up_to_carrot: 1.0
+      use_regulated_linear_velocity_scaling: true
+      use_cost_regulated_linear_velocity_scaling: false
+      regulated_linear_scaling_min_radius: 0.5
+      regulated_linear_scaling_min_speed: 0.1
+      use_rotate_to_heading: true
+      rotate_to_heading_min_angle: 0.785
+      allow_reversing: false
+      max_angular_accel: 3.2
+      max_robot_pose_search_dist: 10.0
     enable_stamped_cmd_vel: false
 
 local_costmap:
