@@ -51,14 +51,14 @@ Visualization Manager:
       Value: /map_updates
     Use Timestamp: false
     Value: true
-  - Alpha: 0.45
+  - Alpha: 0.3
     Binary representation: false
     Binary threshold: 100
     Class: rviz_default_plugins/Map
     Color Scheme: costmap
     Draw Behind: false
     Enabled: true
-    Name: Cleaned floor (blue)
+    Name: Cleaned floor
     Topic:
       Depth: 5
       Durability Policy: Transient Local
@@ -74,14 +74,14 @@ Visualization Manager:
       Value: /clean_manager/cleaned_updates
     Use Timestamp: false
     Value: true
-  - Alpha: 1
+  - Alpha: 0.99
     Binary representation: false
     Binary threshold: 100
     Class: rviz_default_plugins/Map
     Color Scheme: costmap
     Draw Behind: false
     Enabled: true
-    Name: Edges (magenta dirty, green swept, cyan skipped)
+    Name: Edges
     Topic:
       Depth: 5
       Durability Policy: Transient Local
@@ -105,7 +105,7 @@ Visualization Manager:
     Enabled: true
     Head Length: 0.10000000149011612
     Head Radius: 0.06000000089406967
-    Name: Next target
+    Name: Nav2 target
     Shaft Length: 0.20000000298023224
     Shaft Radius: 0.029999999329447746
     Shape: Arrow
@@ -158,7 +158,7 @@ Visualization Manager:
     Max Intensity: 0
     Min Color: 0; 0; 0
     Min Intensity: 0
-    Name: LiDAR /scan
+    Name: LiDAR
     Position Transformer: XYZ
     Selectable: true
     Size (Pixels): 3
