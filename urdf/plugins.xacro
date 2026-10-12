@@ -255,17 +255,17 @@
   </gazebo>
   </xacro:if>
 
-  <!-- One front RGB camera (OV5647-equivalent), VGA, wide FoV. gz publishes
-       gz.msgs.Image on <topic> and gz.msgs.CameraInfo on the sibling camera_info
-       topic (the /image suffix -> /camera_info); config/gz_bridge.yaml bridges both.
-       The image is stamped in the ROS optical frame. -->
-  <xacro:macro name="camera_plugin" params="side">
-    <gazebo reference="camera_${side}_link">
-      <sensor name="camera_${side}" type="camera">
-        <pose relative_to="camera_${side}_link">0 0 0 0 0 0</pose>
+  <!-- The front floor camera: RGB, VGA, wide FoV, tilted down (params.xacro).
+       gz publishes gz.msgs.Image on <topic> and gz.msgs.CameraInfo on the sibling
+       camera_info topic (the /image suffix -> /camera_info); config/gz_bridge.yaml
+       bridges both. The image is stamped in the ROS optical frame. -->
+  <xacro:macro name="camera_plugin">
+    <gazebo reference="camera_link">
+      <sensor name="camera" type="camera">
+        <pose relative_to="camera_link">0 0 0 0 0 0</pose>
         <update_rate>${camera_update_rate}</update_rate>
-        <topic>camera_${side}/image</topic>
-        <gz_frame_id>camera_${side}_optical_frame</gz_frame_id>
+        <topic>camera/image</topic>
+        <gz_frame_id>camera_optical_frame</gz_frame_id>
         <camera>
           <horizontal_fov>${camera_hfov_deg * DEG2RAD}</horizontal_fov>
           <image>
@@ -277,7 +277,7 @@
             <near>${camera_near}</near>
             <far>${camera_far}</far>
           </clip>
-          <optical_frame_id>camera_${side}_optical_frame</optical_frame_id>
+          <optical_frame_id>camera_optical_frame</optical_frame_id>
         </camera>
         <always_on>1</always_on>
         <visualize>true</visualize>
@@ -286,8 +286,7 @@
   </xacro:macro>
 
   <xacro:if value="${'$(arg enable_cameras)' == 'true'}">
-    <xacro:camera_plugin side="left"/>
-    <xacro:camera_plugin side="right"/>
+    <xacro:camera_plugin/>
   </xacro:if>
 
   <!-- IMU: 6-axis (gyro + accelerometer) at imu_link, near the body center. gz

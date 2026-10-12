@@ -34,8 +34,8 @@ Tutorials:
   which cartographer requires).
 - `config/cartographer_lds_2d.lua`, `config/navigation.yaml`, … — SLAM / Nav2 tuning.
 - `config/gz_bridge.yaml`, `urdf/plugins.xacro` — Gazebo simulation: diff-drive, odometry
-  (ground-truth + wheel), 2D LiDAR, side distance sensors, a front multizone ToF, front
-  stereo cameras, and front bumper contact sensors. See
+  (ground-truth + wheel), 2D LiDAR, side distance sensors, a front multizone ToF, a front
+  floor camera, and front bumper contact sensors. See
   [Simulation: sensors, topics & tuning](#simulation-sensors-topics--tuning) below, and
   [docs/sim-bumpers.md](docs/sim-bumpers.md) for how the simulated bumpers are wired and
   the three gz-sim gotchas that make them easy to break.
@@ -83,7 +83,7 @@ gz sensors are defined in `urdf/plugins.xacro` and bridged to ROS 2 by
 | 2D LiDAR (turret) | `/scan` | `sensor_msgs/LaserScan` | 360 samples, 5 Hz, 0.1–10 m | `base_scan` |
 | Side distance L / R | `/range_left`, `/range_right` | `sensor_msgs/LaserScan` | short-range wall sensors aimed straight out (±90°), ~0.02–0.5 m; a real ToF (`sensor_msgs/Range`) on hardware | `range_left_link`, `range_right_link` |
 | Front multizone ToF | `/tof_front/points` | `sensor_msgs/PointCloud2` | 16×8 depth grid, 120°H × 60°V, 0.02–4 m — models two VL53L7CX (each 8×8, 60°) at ±30° | `tof_front_link` |
-| Front stereo cameras L / R | `/camera_left/image`, `/camera_right/image` (+ `…/camera_info`) | `sensor_msgs/Image`, `CameraInfo` | RGB, VGA 640×480, 120° HFoV, ~50 mm base (OV5647-equivalent) | `camera_{left,right}_optical_frame` |
+| Front floor camera | `/camera/image` (+ `/camera/camera_info`) | `sensor_msgs/Image`, `CameraInfo` | RGB, VGA 640×480, 120° HFoV (~105° V); front centre, ~71 mm above the floor, tilted ~38° down so the view runs from the floor at the bumper to ~15° above horizontal: the floor ahead and anything up to about the robot's height. Off by default (`enable_cameras:=true`) | `camera_optical_frame` |
 | Front bumpers L / R | `/bumper_left/contact`, `/bumper_right/contact` | `ros_gz_interfaces/Contacts` | front 180° contact arc; **non-empty `contacts` = pressed** | `base_link` |
 | IMU (gyro + accel) | `/imu` | `sensor_msgs/Imu` | 6-axis, 100 Hz, near body center; angular velocity + linear acceleration + **orientation** (ground-truth attitude; the hardware IMU has none). EKF IMU fusion is off for now | `imu_link` |
 
@@ -117,7 +117,7 @@ ros2 topic list                              # everything available
 ros2 topic hz /scan                          # confirm a sensor is publishing
 ros2 topic echo /bumper_left/contact         # bumpers (non-empty contacts = pressed)
 ros2 topic echo /range_right                 # side distance
-ros2 run rqt_image_view rqt_image_view       # pick /camera_left/image or /camera_right/image
+ros2 run rqt_image_view rqt_image_view       # pick /camera/image (needs enable_cameras:=true)
 ros2 run tf2_tools view_frames               # dump the TF tree to frames.pdf
 # RViz with the shipped config (LiDAR, ToF PointCloud2, cameras, TF):
 ros2 launch oomwoo_bringup monitor_robot.launch.py use_sim_time:=true

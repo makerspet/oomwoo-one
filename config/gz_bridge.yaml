@@ -113,29 +113,17 @@
   gz_type_name: "gz.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
 
-# Front stereo cameras (gz camera -> ROS Image + CameraInfo). OV5647-equivalent
-# RGB, VGA, wide FoV, for obstacle recognition / future stereo depth. gz derives
-# the camera_info topic from the image topic (.../image -> .../camera_info).
-- ros_topic_name: "camera_left/image"
-  gz_topic_name: "camera_left/image"
+# Front floor camera (gz camera -> ROS Image + CameraInfo). RGB, VGA, wide FoV,
+# tilted down at the floor ahead. gz derives the camera_info topic from the image
+# topic (.../image -> .../camera_info).
+- ros_topic_name: "camera/image"
+  gz_topic_name: "camera/image"
   ros_type_name: "sensor_msgs/msg/Image"
   gz_type_name: "gz.msgs.Image"
   direction: GZ_TO_ROS
 
-- ros_topic_name: "camera_left/camera_info"
-  gz_topic_name: "camera_left/camera_info"
-  ros_type_name: "sensor_msgs/msg/CameraInfo"
-  gz_type_name: "gz.msgs.CameraInfo"
-  direction: GZ_TO_ROS
-
-- ros_topic_name: "camera_right/image"
-  gz_topic_name: "camera_right/image"
-  ros_type_name: "sensor_msgs/msg/Image"
-  gz_type_name: "gz.msgs.Image"
-  direction: GZ_TO_ROS
-
-- ros_topic_name: "camera_right/camera_info"
-  gz_topic_name: "camera_right/camera_info"
+- ros_topic_name: "camera/camera_info"
+  gz_topic_name: "camera/camera_info"
   ros_type_name: "sensor_msgs/msg/CameraInfo"
   gz_type_name: "gz.msgs.CameraInfo"
   direction: GZ_TO_ROS

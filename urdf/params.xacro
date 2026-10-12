@@ -145,21 +145,36 @@
   <xacro:property name="tof_front_size" value="0.012"/>            <!-- visual cube edge (m) -->
   <xacro:property name="tof_front_mass" value="0.005"/>            <!-- kg, negligible -->
 
-  <!-- ****************** FRONT STEREO CAMERAS (OV5647) ****************** -->
-  <!-- Two RGB cameras, front & center, flanking the ToF sensor left/right, for
-       obstacle recognition and future stereo depth. VGA, wide FoV. The stereo base
-       is small on purpose (we only need coarse obstacle depth). URDF + camera topics
-       only for now, no stereo processing yet. Each has a REP-103 optical frame
-       (z-forward, x-right, y-down) that the image is published in. Tunable. -->
+  <!-- ****************** FRONT FLOOR CAMERA (RGB) ****************** -->
+  <!-- ONE RGB camera, front & center, as high as the body allows, tilted down to
+       watch the floor ahead and whatever stands on it up to about the robot's own
+       height. It replaces a forward-looking stereo pair: obstacle depth comes from
+       the two front ToF sensors, and what a camera adds that they cannot is the
+       FLOOR itself (stains, streaks, dirt the mop pushed into lines), which is
+       best seen looking down. Not looking up is also a privacy feature.
+
+       The tilt is derived, not tuned: it points the BOTTOM edge of the view
+       straight down, so no pixels are spent on the robot's own bumper. With a
+       120 deg horizontal FoV on a 4:3 sensor the vertical FoV is ~104.8 deg,
+       giving a ~37.6 deg tilt and a top edge ~14.8 deg above horizontal. From
+       about 0.1 m out it sees everything up to the robot's height (~0.1 m),
+       0.2 m tall at 0.5 m, ~0.33 m at 1 m: chair and table legs, sofa bases,
+       never faces. Change the FoV and the tilt follows. NOTE that lens listings
+       often quote DIAGONAL FoV: a "120 deg" lens is then ~108 deg horizontal.
+
+       REP-103 optical frame (z forward, x right, y down) for the image. -->
   <xacro:property name="camera_width" value="640"/>                <!-- VGA -->
   <xacro:property name="camera_height" value="480"/>
   <xacro:property name="camera_hfov_deg" value="120.0"/>
+  <xacro:property name="camera_vfov_deg"
+    value="${2 * degrees(atan(tan(radians(camera_hfov_deg) / 2) * camera_height / camera_width))}"/>
+  <xacro:property name="camera_pitch_deg" value="${90.0 - camera_vfov_deg / 2}"/> <!-- down; bottom edge vertical -->
   <xacro:property name="camera_near" value="0.02"/>                <!-- m -->
   <xacro:property name="camera_far" value="10.0"/>                 <!-- m -->
   <xacro:property name="camera_update_rate" value="15"/>           <!-- Hz -->
-  <xacro:property name="camera_baseline" value="0.05"/>            <!-- m: compact stereo base -->
-  <xacro:property name="camera_x" value="${base_diameter/2}"/>     <!-- front surface -->
-  <xacro:property name="camera_z" value="${lower_cylinder_height/2}"/> <!-- mid-height, flanking the ToF -->
+  <xacro:property name="camera_x" value="${base_diameter/2}"/>     <!-- front surface (window) -->
+  <!-- lens centre 8 mm under the body top: ~71 mm above the floor -->
+  <xacro:property name="camera_z" value="${lower_cylinder_height - 0.008}"/>
   <xacro:property name="camera_size" value="0.010"/>               <!-- visual cube edge (m) -->
   <xacro:property name="camera_mass" value="0.005"/>               <!-- kg, negligible -->
 

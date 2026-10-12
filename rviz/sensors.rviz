@@ -218,28 +218,14 @@ Visualization Manager:
       Max Value: 1
       Median window: 5
       Min Value: 0
-      Name: Camera Left
+      Name: Floor Camera
       Normalize Range: true
       Topic:
         Depth: 5
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /camera_left/image
-      Value: true
-    - Class: rviz_default_plugins/Image
-      Enabled: true
-      Max Value: 1
-      Median window: 5
-      Min Value: 0
-      Name: Camera Right
-      Normalize Range: true
-      Topic:
-        Depth: 5
-        Durability Policy: Volatile
-        History Policy: Keep Last
-        Reliability Policy: Reliable
-        Value: /camera_right/image
+        Value: /camera/image
       Value: true
     - Alpha: 0.699999988079071
       Class: rviz_default_plugins/Map
@@ -360,9 +346,7 @@ Visualization Manager:
       Yaw: 3.1415927410125732
     Saved: ~
 Window Geometry:
-  Camera Left:
-    collapsed: false
-  Camera Right:
+  Floor Camera:
     collapsed: false
   Displays:
     collapsed: false

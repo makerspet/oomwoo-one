@@ -153,17 +153,18 @@
     </link>
   </xacro:macro>
 
-  <!-- One front RGB camera flanking the ToF, plus a ROS optical frame (REP-103:
-       x right, y down, z forward) the image is published in. side_sign = +1 left
-       (+Y), -1 right (-Y). The gz camera sensor is in plugins.xacro. -->
-  <xacro:macro name="stereo_camera" params="side side_sign">
-    <joint name="camera_${side}_joint" type="fixed">
+  <!-- The front floor camera, tilted down by camera_pitch_deg (positive pitch
+       about +Y tips +X towards the floor), plus a ROS optical frame (REP-103:
+       x right, y down, z forward) the image is published in. The gz camera
+       sensor is in plugins.xacro. -->
+  <xacro:macro name="floor_camera">
+    <joint name="camera_joint" type="fixed">
       <parent link="base_link"/>
-      <child link="camera_${side}_link"/>
-      <origin xyz="${camera_x} ${side_sign * camera_baseline/2} ${camera_z}"
-              rpy="0 0 0"/>
+      <child link="camera_link"/>
+      <origin xyz="${camera_x} 0 ${camera_z}"
+              rpy="0 ${radians(camera_pitch_deg)} 0"/>
     </joint>
-    <link name="camera_${side}_link">
+    <link name="camera_link">
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <geometry>
@@ -174,12 +175,12 @@
       <xacro:solid_box_inertia m="${camera_mass}"
         x="${camera_size}" y="${camera_size}" z="${camera_size}"/>
     </link>
-    <joint name="camera_${side}_optical_joint" type="fixed">
-      <parent link="camera_${side}_link"/>
-      <child link="camera_${side}_optical_frame"/>
+    <joint name="camera_optical_joint" type="fixed">
+      <parent link="camera_link"/>
+      <child link="camera_optical_frame"/>
       <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
     </joint>
-    <link name="camera_${side}_optical_frame"/>
+    <link name="camera_optical_frame"/>
   </xacro:macro>
 
   <link name="base_footprint"/>
@@ -344,9 +345,8 @@
   <!-- Front multizone ToF depth sensor (front & center) -->
   <xacro:front_tof_sensor/>
 
-  <!-- Front stereo cameras, flanking the ToF left/right -->
-  <xacro:stereo_camera side="left" side_sign="1"/>
-  <xacro:stereo_camera side="right" side_sign="-1"/>
+  <!-- Front floor camera, top centre, tilted down -->
+  <xacro:floor_camera/>
 
   <!-- IMU (gyro + accelerometer), near the body center -->
   <joint name="imu_joint" type="fixed">
