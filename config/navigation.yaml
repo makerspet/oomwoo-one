@@ -163,7 +163,9 @@ local_costmap:
       height: 3
       resolution: 0.02
       robot_radius: 0.1745
-      plugins: ["obstacle_layer", "voxel_layer", "inflation_layer"]
+      # No voxel_layer: with a single-plane 2D LiDAR it only repeated the
+      # obstacle_layer's ray tracing (and published an empty 3D grid).
+      plugins: ["obstacle_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         # Tight for a vacuum: it should hug walls/furniture to clean edges, not
@@ -174,22 +176,6 @@ local_costmap:
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
-        observation_sources: scan
-        scan:
-          topic: /scan
-          max_obstacle_height: 2.0
-          clearing: true
-          marking: true
-          data_type: "LaserScan"
-      voxel_layer:
-        plugin: "nav2_costmap_2d::VoxelLayer"
-        enabled: true
-        publish_voxel_map: true
-        origin_z: 0.0
-        z_resolution: 0.05
-        z_voxels: 16
-        max_obstacle_height: 2.0
-        mark_threshold: 0
         observation_sources: scan
         scan:
           topic: /scan
@@ -216,30 +202,10 @@ global_costmap:
       robot_radius: 0.1745
       resolution: 0.05
       track_unknown_space: true
-      plugins: ["static_layer", "obstacle_layer", "voxel_layer", "inflation_layer"]
+      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]   # no voxel_layer, see local_costmap
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
         enabled: true
-        observation_sources: scan
-        scan:
-          topic: /scan
-          max_obstacle_height: 2.0
-          clearing: true
-          marking: true
-          data_type: "LaserScan"
-          raytrace_max_range: 3.0
-          raytrace_min_range: 0.0
-          obstacle_max_range: 2.5
-          obstacle_min_range: 0.0
-      voxel_layer:
-        plugin: "nav2_costmap_2d::VoxelLayer"
-        enabled: true
-        publish_voxel_map: true
-        origin_z: 0.0
-        z_resolution: 0.05
-        z_voxels: 16
-        max_obstacle_height: 2.0
-        mark_threshold: 0
         observation_sources: scan
         scan:
           topic: /scan
@@ -430,3 +396,11 @@ velocity_smoother:
     odom_duration: 0.1
     use_realtime_priority: false
     enable_stamped_cmd_vel: false
+
+# Every Nav2 node: send the lifecycle "bond" heartbeat once a second instead of
+# Nav2's default ten times a second. The lifecycle manager still notices a dead
+# node, within its 4 s bond_timeout; ten heartbeats a second per node was a
+# measurable share of Nav2's idle CPU.
+/**:
+  ros__parameters:
+    bond_heartbeat_period: 1.0
